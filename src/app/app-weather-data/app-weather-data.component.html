@@ -1,0 +1,51 @@
+<!-- <p>app-weather-data works!</p> -->
+<div class="container">
+    <h1>Weather Forecast</h1>
+    <div class="search-box">
+        <input type="text" [(ngModel)]="city" (input)="onInput($event)" placeholder="Enter city name">
+        <button (click)="getWeather()">Search</button>
+        <ul *ngIf="suggestions.length > 0" class="suggestions">
+            <li *ngFor="let suggestion of suggestions" (click)="selectCity(suggestion)">
+                {{ suggestion.name }}, {{ suggestion.state ? suggestion.state + ', ' : '' }}{{ suggestion.country }}
+            </li>
+        </ul>
+    </div>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <div *ngIf="weatherData" class="weather-card">
+        <h2>{{ weatherData.name }}, {{ weatherData.sys.country }}</h2>
+        <div class="weather-icon">
+            <img [src]="'https://openweathermap.org/img/wn/' + weatherData.weather[0].icon + '@2x.png'"
+                [alt]="weatherData.weather[0].description">
+        </div>
+        <div class="temperature">{{ (weatherData.main.temp - 273.15).toFixed(1) }}°C</div>
+        <div class="description">{{ weatherData.weather[0].description | titlecase }}</div>
+        <div class="details">
+            <div class="detail-item">
+                <i class="fas fa-thermometer-half"></i>
+                <span class="detail-label">Feels Like</span>
+                <span class="detail-value">{{ (weatherData.main.feels_like - 273.15).toFixed(1) }}°C</span>
+            </div>
+            <div class="detail-item">
+                <i class="fas fa-tint"></i>
+                <span class="detail-label">Humidity</span>
+                <span class="detail-value">{{ weatherData.main.humidity }}%</span>
+            </div>
+            <div class="detail-item">
+                <i class="fas fa-wind"></i>
+                <span class="detail-label">Wind</span>
+                <span class="detail-value">{{ weatherData.wind.speed.toFixed(1) }} m/s</span>
+            </div>
+            <div class="detail-item">
+                <i class="fas fa-tachometer-alt"></i>
+                <span class="detail-label">Pressure</span>
+                <span class="detail-value">{{ weatherData.main.pressure }} hPa</span>
+            </div>
+            <div class="detail-item">
+                <i class="fas fa-cloud"></i>
+                <span class="detail-label">Cloudiness</span>
+                <span class="detail-value">{{ weatherData.clouds.all }}%</span>
+            </div>
+        </div>
+        <div class="update-time">Last updated: {{ getFormattedDate(weatherData.dt) }}</div>
+    </div>
+</div>
